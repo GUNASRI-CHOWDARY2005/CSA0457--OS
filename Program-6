@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Process {
+    int id;
+    int burst_time;
+    int priority;
+};
+
+void sortProcesses(struct Process proc[], int n) {
+    struct Process temp;
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (proc[i].priority > proc[j].priority) {
+                temp = proc[i];
+                proc[i] = proc[j];
+                proc[j] = temp;
+            }
+        }
+    }
+}
+
+void preemptivePriorityScheduling(struct Process proc[], int n) {
+    sortProcesses(proc, n);
+    int remaining_time[n];
+    for (int i = 0; i < n; i++) {
+        remaining_time[i] = proc[i].burst_time;
+    }
+
+    int complete = 0, time = 0, min_priority;
+    while (complete < n) {
+        min_priority = -1;
+        for (int j = 0; j < n; j++) {
+            if (remaining_time[j] > 0 && (min_priority == -1 || proc[j].priority < proc[min_priority].priority)) {
+                min_priority = j;
+            }
+        }
+
+        if (min_priority != -1) {
+            remaining_time[min_priority]--;
+            if (remaining_time[min_priority] == 0) {
+                complete++;
+                printf("Process %d completed at time %d\n", proc[min_priority].id, time + 1);
+            }
+        }
+        time++;
+    }
+}
+
+int main() {
+    struct Process proc[] = {
+        {1, 10, 2},
+        {2, 5, 1},
+        {3, 8, 3}
+    };
+    int n = sizeof(proc) / sizeof(proc[0]);
+    preemptivePriorityScheduling(proc, n);
+    return 0;
+}
