@@ -38,4 +38,3 @@ int main() {
     worstFit(blockSize, m, processSize, n);
     return 0;
 }
-21
