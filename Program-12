@@ -121,4 +121,4 @@ int main()
     for (i = 0; i < N; i++)
 
         pthread_join(thread_id[i], NULL);
-} 12 th
+} 
